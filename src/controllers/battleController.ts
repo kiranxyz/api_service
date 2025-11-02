@@ -43,7 +43,9 @@ export const playTurn: RequestHandler = async (req, res) => {
     const player2Doc = battle.player2 as PlayerDoc;
 
     console.log('Fetched players:', { player1Doc, player2Doc });
+    // WIP : Implement the battle turn logic
     runBattleTurn(battle, player1Attack, player2Attack, player1Doc, player2Doc);
+
     //console.log(await player1Doc.save());
     // await player2Doc.save();
     const updatedBattle = await battle.save();
