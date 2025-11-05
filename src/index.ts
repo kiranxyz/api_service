@@ -3,6 +3,7 @@ import express from 'express';
 import '#db';
 import { errorHandler } from '#middlewares';
 import { battleRouter } from '#routes';
+import pokemonRouter from '../src/routes/pokemonRouter.ts';
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -14,6 +15,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use('/pokemon', pokemonRouter);
 app.use('/api/battle', battleRouter);
 
 app.use('/*splat', (_req, res) => {
