@@ -1,27 +1,20 @@
-import type { RequestHandler } from 'express';
-import Pokemon from '../models/Pokemon.ts';
+import { storePokemonSchemaZod } from '../schemas/schemas.ts';
+import Pokemon from '../models/pokemonModel.js';
 
-export const storePokemon: RequestHandler = async (req, res) => {
+export const storePokemon = async (req, res) => {
   try {
-    const { userId, ...pokemonData } = req.body;
+    const parsed = storePokemonSchemaZod.parse(req.body);
 
-    if (!userId) {
-      return res.status(400).json({ error: 'userId is required' });
-    }
+    const pokemon = new Pokemon(parsed);
+    await pokemon.save();
 
-    const existing = await Pokemon.findOne({ userId, name: pokemonData.name });
-    if (existing) {
-      return res.status(409).json({ message: `${pokemonData.name} already exists for this user` });
-    }
-
-    const pokemon = await Pokemon.create({ userId, ...pokemonData });
-    res.status(201).json({
-      message: `Stored Pokémon ${pokemon.name} for user ${userId}`,
-      pokemon
-    });
+    res.status(201).json({ message: 'Pokémon stored successfully', pokemon });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to store Pokémon' });
+    console.error('Error storing Pokémon:', err);
+    if (err.name === 'ZodError') {
+      return res.status(400).json({ message: 'Validation failed', errors: err.errors });
+    }
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 

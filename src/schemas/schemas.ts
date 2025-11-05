@@ -11,23 +11,24 @@ export const playTurnSchemaZod = z.object({
 });
 
 export const storePokemonSchemaZod = z.object({
-  userId: z.string().nonempty(),
-  name: z.string().min(1),
-  type: z.string().min(1),
-  height: z.number().min(1),
-  weight: z.number().min(1),
-  stats: z.number().min(0),
-  hp: z.number().min(0),
-  attack: z.number().min(0),
-  defense: z.number().min(0),
-  specialattack: z.number().min(0),
-  specialdefense: z.number().min(0),
-  speed: z.number().min(0),
-  abilities: z.string().min(0),
-  overgrow: z.string().min(0),
-  chlorophyll: z.string().min(0)
+  userId: z.string().nonempty('User ID is required'),
+  id: z.number().int().min(1, 'Pokemon ID is required'),
+  name: z.string().min(1, 'Name is required'),
+  type: z.string().optional(),
+  height: z.number().optional(),
+  weight: z.number().optional(),
+  stats: z.number().optional(),
+  hp: z.number().optional(),
+  attack: z.number().optional(),
+  defense: z.number().optional(),
+  specialattack: z.number().optional(),
+  specialdefense: z.number().optional(),
+  speed: z.number().optional(),
+  abilities: z.array(z.string()).optional(),
+  overgrow: z.string().optional(),
+  chlorophyll: z.string().optional()
 });
 
 export const userIdParamSchemaZod = z.object({
-  userId: z.string().nonempty()
+  userId: z.string().nonempty('User ID is required')
 });
