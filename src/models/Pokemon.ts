@@ -1,5 +1,5 @@
 import { model, Schema, Document } from 'mongoose';
-
+import { type Move } from '../types/types.ts';
 export interface PokemonDoc extends Document {
   userId: string;
   id: number;
@@ -17,8 +17,16 @@ export interface PokemonDoc extends Document {
   abilities?: string[];
   overgrow?: string;
   chlorophyll?: string;
+  moves?: Move[];
 }
-
+const MoveSchema = new Schema<Move>(
+  {
+    name: { type: String, required: true },
+    power: { type: Number, required: true },
+    type: { type: String, required: true }
+  },
+  { _id: false }
+);
 const pokemonSchema = new Schema<PokemonDoc>(
   {
     userId: { type: String, required: [true, 'User ID is required'] },
@@ -36,7 +44,8 @@ const pokemonSchema = new Schema<PokemonDoc>(
     speed: { type: Number, required: false },
     abilities: { type: [String], required: false, default: [] },
     overgrow: { type: String, required: false },
-    chlorophyll: { type: String, required: false }
+    chlorophyll: { type: String, required: false },
+    moves: { type: [MoveSchema], default: [] }
   },
   { timestamps: true }
 );

@@ -1,14 +1,15 @@
 import { Router } from 'express';
+import { startBattle, getBattle, performMove } from '../controllers/battleController.ts';
 import { validateZod } from '#middlewares';
-import { startBattle, playTurn, status } from '#controllers';
-import { startBattleSchemaZod, playTurnSchemaZod } from '#schemas';
+import { startBattleSchemaZod } from '#schemas';
+
 const battleRouter = Router();
 
-battleRouter.route('/start').post(validateZod(startBattleSchemaZod), startBattle);
+battleRouter.post('/start', validateZod(startBattleSchemaZod), startBattle);
 
-// WIP: Implement the play turn
-battleRouter.route('/turn/:battleId').post(validateZod(playTurnSchemaZod), playTurn);
+battleRouter.get('/:id', getBattle);
 
-battleRouter.route('/status/:battleId').get(status);
+console.log('in ');
+battleRouter.post('/move', performMove);
 
 export default battleRouter;

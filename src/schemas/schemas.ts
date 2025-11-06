@@ -2,12 +2,18 @@ import { loadEnvFile } from 'process';
 import { z } from 'zod/v4';
 
 export const startBattleSchemaZod = z.object({
-  player1: z.string().min(1),
-  player2: z.string().min(1)
+  playerPokemonId: z.string().nonempty(),
+  enemyPokemonId: z.string().nonempty()
 });
 export const playTurnSchemaZod = z.object({
   player1Attack: z.number().min(0),
   player2Attack: z.number().min(0)
+});
+
+export const moveSchemaZod = z.object({
+  name: z.string().min(1, 'Move name is required'),
+  power: z.number().min(1, 'Move power must be at least 1'),
+  type: z.string().min(1, 'Move type is required')
 });
 
 export const storePokemonSchemaZod = z.object({
@@ -26,9 +32,9 @@ export const storePokemonSchemaZod = z.object({
   speed: z.number().optional(),
   abilities: z.array(z.string()).optional(),
   overgrow: z.string().optional(),
-  chlorophyll: z.string().optional()
+  chlorophyll: z.string().optional(),
+  moves: z.array(moveSchemaZod).optional().default([])
 });
 
-export const userIdParamSchemaZod = z.object({
-  userId: z.string().nonempty('User ID is required')
-});
+export type StorePokemonInput = z.infer<typeof storePokemonSchemaZod>;
+export type StartBattleInput = z.infer<typeof startBattleSchemaZod>;

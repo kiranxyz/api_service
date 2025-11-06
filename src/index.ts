@@ -4,7 +4,6 @@ import '#db';
 import { errorHandler } from '#middlewares';
 import { battleRouter } from '#routes';
 import pokemonRouter from '../src/routes/pokemonRouter.ts';
-
 const app = express();
 const port = process.env.PORT || 8080;
 app.use(

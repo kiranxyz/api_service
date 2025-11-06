@@ -1,4 +1,4 @@
-import { model, Schema, Document, Types } from 'mongoose';
+import mongoose, { model, Schema, Document, Types } from 'mongoose';
 import { type PlayerDoc } from '../models/Player.ts';
 
 interface Scores {
@@ -7,33 +7,29 @@ interface Scores {
 }
 
 export interface BattleDoc extends Document {
-  battleId: Types.ObjectId;
-  player1: Types.ObjectId | PlayerDoc;
-  player2: Types.ObjectId | PlayerDoc;
-  turn: number;
-  scores: {
-    player1: number;
-    player2: number;
-  };
+  players: {
+    side: 'player' | 'opponent';
+    pokemonId: mongoose.Types.ObjectId;
+    snapshot: any;
+  }[];
+  log: { at: number; text: string }[];
   winner?: string;
+  roomId: string;
+  createdAt: Date;
 }
 
-const battleSchema = new Schema<BattleDoc>(
-  {
-    battleId: { type: Schema.Types.ObjectId, auto: true },
-    player1: { type: String, required: true },
-    player2: { type: String, required: true },
-    turn: { type: Number, default: 1 },
-    scores: {
-      player1: { type: Number, default: 0 },
-      player2: { type: Number, default: 0 }
-    },
-    winner: { type: String, default: null }
-  },
-  {
-    timestamps: true
-  }
-);
+const BattlePlayerSchema = new Schema({
+  side: { type: String, required: true },
+  pokemonId: { type: Schema.Types.ObjectId, required: true },
+  snapshot: { type: Schema.Types.Mixed, required: true }
+});
 
-export const Battle = model<BattleDoc>('Battle', battleSchema);
-export default Battle;
+const BattleSchema = new Schema<BattleDoc>({
+  players: { type: [BattlePlayerSchema], required: true },
+  log: { type: [{ at: Number, text: String }], default: [] },
+  winner: { type: String },
+  roomId: { type: String, required: true },
+  createdAt: { type: Date, default: () => new Date() }
+});
+
+export default model<BattleDoc>('Battle', BattleSchema);
