@@ -4,11 +4,11 @@ import { calcDamage, typeEffectiveness } from '../utils/battleLogic.ts';
 import { v4 as uuidv4 } from 'uuid';
 import { type PokemonDoc } from '../models/Pokemon.ts';
 
-export const createBattle = async (playerPokemonId: string, enemyPokemonId: string) => {
+export const createBattle = async (playerPokemonId: string, oponentPokemonId: string) => {
   const playerDoc = await Pokemon.findById(playerPokemonId).lean<Partial<PokemonDoc & { moves?: any[] }>>();
-  const enemyDoc = await Pokemon.findById(enemyPokemonId).lean<Partial<PokemonDoc & { moves?: any[] }>>();
+  const oponentDoc = await Pokemon.findById(oponentPokemonId).lean<Partial<PokemonDoc & { moves?: any[] }>>();
 
-  if (!playerDoc || !enemyDoc) throw new Error('Invalid pokemon ids');
+  if (!playerDoc || !oponentDoc) throw new Error('Invalid pokemon ids');
 
   const playerSnap = {
     ...playerDoc,
@@ -16,10 +16,10 @@ export const createBattle = async (playerPokemonId: string, enemyPokemonId: stri
     moves: playerDoc.moves ?? []
   };
 
-  const enemySnap = {
-    ...enemyDoc,
-    hp: enemyDoc.hp ?? 100,
-    moves: enemyDoc.moves ?? []
+  const oponentSnap = {
+    ...oponentDoc,
+    hp: oponentDoc.hp ?? 100,
+    moves: oponentDoc.moves ?? []
   };
 
   const roomId = uuidv4();
@@ -27,7 +27,7 @@ export const createBattle = async (playerPokemonId: string, enemyPokemonId: stri
   const battle = await Battle.create({
     players: [
       { side: 'player', pokemonId: playerDoc._id, snapshot: playerSnap },
-      { side: 'enemy', pokemonId: enemyDoc._id, snapshot: enemySnap }
+      { side: 'oponent', pokemonId: oponentDoc._id, snapshot: oponentSnap }
     ],
     log: [{ at: Date.now(), text: 'Battle started!' }],
     roomId
@@ -40,7 +40,7 @@ export const getBattle = async (battleId: string) => {
   return Battle.findById(battleId).lean();
 };
 
-export const performMove = async (battleId: string, actorSide: 'player' | 'enemy', moveName: string) => {
+export const performMove = async (battleId: string, actorSide: 'player' | 'oponent', moveName: string) => {
   const battle = await Battle.findById(battleId);
   if (!battle) throw new Error('Battle not found');
 

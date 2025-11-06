@@ -4,6 +4,8 @@ import '#db';
 import { errorHandler } from '#middlewares';
 import { battleRouter } from '#routes';
 import pokemonRouter from '../src/routes/pokemonRouter.ts';
+import leaderboardRouter from './routes/leaderboardRouter.ts';
+
 const app = express();
 const port = process.env.PORT || 8080;
 app.use(
@@ -16,6 +18,7 @@ app.use(
 app.use(express.json());
 app.use('/pokemon', pokemonRouter);
 app.use('/api/battle', battleRouter);
+app.use('/api/leaderboard', leaderboardRouter);
 
 app.use('/*splat', (_req, res) => {
   res.status(404).json({ error: 'Not found' });

@@ -35,6 +35,14 @@ export const storePokemonSchemaZod = z.object({
   chlorophyll: z.string().optional(),
   moves: z.array(moveSchemaZod).optional().default([])
 });
+export const addLeaderboardEntrySchemaZod = z.object({
+  userId: z.string().nonempty('User ID is required'),
+  username: z.string().min(1, 'Username is required'),
+  score: z.number().min(0, 'Score must be non-negative'),
+  wins: z.number().optional().default(0),
+  losses: z.number().optional().default(0)
+});
 
+export type AddLeaderboardEntryInput = z.infer<typeof addLeaderboardEntrySchemaZod>;
 export type StorePokemonInput = z.infer<typeof storePokemonSchemaZod>;
 export type StartBattleInput = z.infer<typeof startBattleSchemaZod>;

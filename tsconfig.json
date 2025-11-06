@@ -23,7 +23,11 @@
     /* Paths */
     "baseUrl": "./src",
     "paths": {
-      "#*": ["*"]
+      "#*": ["*"],
+      "#db": ["db/index.ts"],
+      "#routes": ["routes/index.ts"],
+      "#middlewares": ["middlewares/index.ts"],
+      "#schemas": ["schemas/index.ts"]
     }
   },
   "include": ["src"]

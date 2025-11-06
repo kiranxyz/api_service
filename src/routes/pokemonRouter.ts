@@ -3,10 +3,9 @@ import { storePokemon, getPokemonByUserId } from '../controllers/pokemonControll
 import { validateZod } from '#middlewares';
 import { storePokemonSchemaZod } from '#schemas';
 
-const router = Router();
+const pokemonRouter = Router();
 
-router.post('/store', validateZod(storePokemonSchemaZod), storePokemon);
-console.log('in');
-router.get('/:userId', getPokemonByUserId);
+pokemonRouter.post('/store', validateZod(storePokemonSchemaZod), storePokemon);
+pokemonRouter.get('/:userId', getPokemonByUserId);
 
-export default router;
+export default pokemonRouter;

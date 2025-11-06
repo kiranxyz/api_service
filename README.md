@@ -29,6 +29,7 @@ wbs-api-service/
 |- routes/ => Our routers per resource
 |- schemas/
 |   \_ schemas.js => Zod schemas for data validations
+|- services/  => Our services per resource
 |- types/ => For additional types
 |- utils/ => For helper function
 \_ index.js
