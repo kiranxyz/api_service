@@ -6,6 +6,7 @@ export interface PokemonDoc extends Document {
   name: string;
   type?: string;
   height?: number;
+  sprites?: string;
   weight?: number;
   stats?: number;
   hp?: number;
@@ -35,6 +36,7 @@ const pokemonSchema = new Schema<PokemonDoc>(
     type: { type: String, required: false },
     height: { type: Number, required: false },
     weight: { type: Number, required: false },
+    sprites: { type: String, required: false },
     stats: { type: Number, required: false },
     hp: { type: Number, required: false },
     attack: { type: Number, required: false },
